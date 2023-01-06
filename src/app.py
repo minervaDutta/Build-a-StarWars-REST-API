@@ -114,6 +114,18 @@ def get_all_users_planets(planet_id, user_id):
     fav_planets.append(planet_id) #adds to list
     user1.favourite_planets = json.dumps(fav_planets) #list to str
 
+@app.route('/favourite/planet/<planet_id>/<user_id>', methods=['DELETE'])
+def delete_favourites(planet_id, user_id):
+    user1 = User.query.get(user_id)
+    if user1 is None:
+        return "ok", 200
+    fav_planets = json.loads(user1.favourite_planets)
+    fav_planets.remove(planet_id)
+    user1.favourite_planets = json.dumps(fav_planets) #list to str
+    db.session.commit()
+    return "planet removed", 200
+    
+
     db.session.commit()
     return "New planet added", 200
 
